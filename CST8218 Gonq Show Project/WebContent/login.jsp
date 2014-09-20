@@ -7,7 +7,7 @@
 <title>Gonq Show Login</title>
 </head>
 <body>
-	<form method="post" action="login.jsp">
+	<form method="post" action="LoginServlet">
 	    <center>
 	    <table width="30%" cellpadding="3">
 	        <thead>
@@ -18,14 +18,14 @@
 	        <tbody>
 	            <tr>
 	                <td>User Name</td>
-	                <td><input type="text" name="uname" value="" /></td>
+	                <td><input type="text" name="username" value="" /></td>
 	            </tr>
 	            <tr>
 	                <td>Password</td>
-	                <td><input type="password" name="pass" value="" /></td>
+	                <td><input type="password" name="password" value="" /></td>
 	            </tr>
 	            <tr>
-	                <td><input type="submit" value="Login" /></td>
+	                <td><input type="submit" value="login" /></td>
 	            </tr>
 	            <tr>
 	                <td colspan="2"> Not A Member!! <a href="signup.jsp">Sign Up Now!!</a></td>
