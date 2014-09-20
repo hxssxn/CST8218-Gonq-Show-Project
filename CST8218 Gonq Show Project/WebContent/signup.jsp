@@ -42,7 +42,7 @@
 	            <tr>
 	            	<td>Program</td>
 	            	<td>
-		            	<select name="programDropDown">
+		            	<select name="programDropDown" >
 						<option value="computerEngineeringTechnology">Computer Engineering Technology</option>
 						<option value="computerProgramming">Computer Programming</option>
 						<option value="computerSystemsTechnician">Computer Systems Technician</option>
