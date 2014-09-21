@@ -84,21 +84,22 @@ public class LoginServlet extends HttpServlet {
         ResultSet resultSet = null;  
   
         String url = "jdbc:mysql://localhost:3306/";  
-        String databaseName = "form";  
+        String databaseName = "gonqshowdb";  
         String driver = "com.mysql.jdbc.Driver";  
-        String dbUsername = "root";  
-        String dbPassword = "password";  
+        String dbUsername = "gonqshow";  
+        String dbPassword = "gonqshow";  
         try {  
             Class.forName(driver).newInstance();  
             connection = DriverManager.getConnection(url + databaseName, dbUsername, dbPassword);  
   
-            preparedStatement = connection.prepareStatement("select * from login where user=? and password=?");  
+            preparedStatement = connection.prepareStatement("SELECT * FROM users WHERE username=? AND password=PASSWORD(?)"); 
             preparedStatement.setString(1, name);  
             preparedStatement.setString(2, password);  
   
             resultSet = preparedStatement.executeQuery();
             // Method will return false when the entire table is traversed
-            status = resultSet.next();  
+
+            status = resultSet.next();
   
         } catch (Exception e) {  
             System.out.println(e);  
@@ -132,60 +133,3 @@ public class LoginServlet extends HttpServlet {
         return status;  
     }  
 }
-
-/*
-<%! 
-	String userdbName;
-	String userdbPsw;
-	String dbUsertype;
-%>
-<%
-	Connection con= null;
-	PreparedStatement ps = null;
-	ResultSet rs = null;
-	
-	String driverName = "com.mysql.jdbc.Driver";
-	String url = "jdbc:mysql://localhost:3306/record";
-	String user = "root";
-	String dbpsw = "root";
-	
-	String sql = "select * from userdetail where name=? and password=? and usertype=?";
-	
-	String name = request.getParameter("name");
-	String password = request.getParameter("password");
-	String usertype = request.getParameter("usertype");
-	
-	if((!(name.equals(null) || name.equals("")) && !(password.equals(null) || password.equals(""))) && !usertype.equals("select")) {
-		try{
-			Class.forName(driverName);
-			con = DriverManager.getConnection(url, user, dbpsw);
-			ps = con.prepareStatement(sql);
-			ps.setString(1, name);
-			ps.setString(2, password);
-			ps.setString(3, usertype);
-			rs = ps.executeQuery();
-			if(rs.next()) { 
-				userdbName = rs.getString("name");
-				userdbPsw = rs.getString("password");
-				dbUsertype = rs.getString("usertype");
-				if(name.equals(userdbName) && password.equals(userdbPsw) && usertype.equals(dbUsertype)) {
-					session.setAttribute("name",userdbName);
-					session.setAttribute("usertype", dbUsertype); 
-					response.sendRedirect("welcome.jsp"); 
-				} 
-			} else
-				response.sendRedirect("error.jsp");
-			rs.close();
-			ps.close(); 
-		} catch(SQLException sqe) {
-		out.println(sqe);
-		} 
-	}
-	else {
-%>
-	<center><p style="color:red">Error In Login</p></center>
-<% 
-		getServletContext().getRequestDispatcher("/home.jsp").include(request, response);
-	}
-%>
-*/
