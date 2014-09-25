@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Gonq Show Login</title>
+<title>Gonq Show</title>
 </head>
 <body>
 	<center>

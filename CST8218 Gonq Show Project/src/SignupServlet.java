@@ -23,7 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 public class SignupServlet extends HttpServlet {
 	
 	static String email;
-	static String password;
+	static String password1;
+	static String password2;
 	static String firstName;
 	static String lastName;
 	static String aboutMe;
@@ -57,7 +58,8 @@ public class SignupServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		
 		email = request.getParameter("email");
-		password = request.getParameter("password1");
+		password1 = request.getParameter("password1");
+		password2 = request.getParameter("password2");
 		firstName = request.getParameter("firstName");
 		lastName = request.getParameter("lastName");
 		aboutMe = request.getParameter("aboutMe");
@@ -65,18 +67,22 @@ public class SignupServlet extends HttpServlet {
 		program = request.getParameter("programDropDown");
 		studentOrFaculty = request.getParameter("sf");
 		
-		if (insertNewRecord()) {
-			RequestDispatcher requestDispatcher = request.getRequestDispatcher("homepage.jsp");
-			requestDispatcher.forward(request,response);
+		if (password1.equals(password2)){
+			if (insertNewRecord()) {
+				RequestDispatcher requestDispatcher = request.getRequestDispatcher("homepage.jsp");
+				requestDispatcher.forward(request,response);
+			} else {
+				out.print("<p style=\"color:red\">Sorry sign up error</p>");    
+				RequestDispatcher requestDispatcher=request.getRequestDispatcher("signup.jsp");    
+				requestDispatcher.include(request,response); 
+			}
 		}
-		if (!insertNewRecord()) {
-			out.print("<p style=\"color:red\">Sorry sign up error</p>");    
-			RequestDispatcher requestDispatcher=request.getRequestDispatcher("index.jsp");    
+		else {
+			out.print("<p style=\"color:red\">Password do not match</p>");    
+			RequestDispatcher requestDispatcher=request.getRequestDispatcher("signup.jsp");    
 			requestDispatcher.include(request,response); 
 		}
-		out.close();
-	
-		
+		out.close();	
 	}
 	
 	public static boolean insertNewRecord () {
@@ -98,7 +104,7 @@ public class SignupServlet extends HttpServlet {
             		+ "(email, password, first_name, last_name, program_department, program, student_faculty)"
             		+ "VALUES (?, PASSWORD(?), ?, ?, ?, ?, ?)"); 
             preparedStatement.setString(1, email);  
-            preparedStatement.setString(2, password); 
+            preparedStatement.setString(2, password1); 
             preparedStatement.setString(3, firstName);
             preparedStatement.setString(4, lastName);
             preparedStatement.setString(5, programDepartment);
