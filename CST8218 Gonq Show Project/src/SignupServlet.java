@@ -1,9 +1,8 @@
-/* SOURCE OF CODE FROM 
- * http://javaandj2eetutor.blogspot.ca/2014/01/login-application-using-jsp-servlet-and.html
- */
+
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,21 +14,29 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import java.sql.Connection;
 
 /**
- * Servlet implementation class LoginServlet
+ * Servlet implementation class SignupServlet
  */
-@WebServlet("/LoginServlet")
-public class LoginServlet extends HttpServlet {
+
+@WebServlet("/SignupServlet")
+public class SignupServlet extends HttpServlet {
+	
+	static String email;
+	static String password;
+	static String firstName;
+	static String lastName;
+	static String aboutMe;
+	static String programDepartment;
+	static String program;
+	static String studentOrFaculty;
+	
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LoginServlet() {
+    public SignupServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -46,38 +53,33 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		// WHAT DOES THIS DO?????????--------------------------------------------------------------------------------
 		response.setContentType("text/html");
-		// Object created to send error message if username or password is incorrect
 		PrintWriter out = response.getWriter();
 		
-		//Retrieve username and password from login.jsp
-		String username = request.getParameter("username");
-		String password = request.getParameter("password");
+		email = request.getParameter("email");
+		password = request.getParameter("password1");
+		firstName = request.getParameter("firstName");
+		lastName = request.getParameter("lastName");
+		aboutMe = request.getParameter("aboutMe");
+		programDepartment = request.getParameter("departmentDropDown");
+		program = request.getParameter("programDropDown");
+		studentOrFaculty = request.getParameter("sf");
 		
-		// WHAT DOES THIS DO?????????--------------------------------------------------------------------------------
-		HttpSession session = request.getSession(false);
-		if (session != null)
-			session.setAttribute("name", username);
-		
-		// Validation of username and password successful
-		if (validate(username, password)) {
-			// Redirect to homepage.jsp
+		if (insertNewRecord()) {
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("homepage.jsp");
-			// WHAT DOES THIS DO?????????--------------------------------------------------------------------------------
-			requestDispatcher.forward(request,response);  
-		// Validation of username and password returns error
-		} else {    
-			// Print error to index.jsp and then redirect to the page
-			out.print("<p style=\"color:red\">Sorry username or password error</p>");    
-			RequestDispatcher requestDispatcher=request.getRequestDispatcher("index.jsp");    
-			requestDispatcher.include(request,response);    
+			requestDispatcher.forward(request,response);
 		}
-		// Close PrintWriter object to prevent leaks
-		out.close(); 
+		if (!insertNewRecord()) {
+			out.print("<p style=\"color:red\">Sorry sign up error</p>");    
+			RequestDispatcher requestDispatcher=request.getRequestDispatcher("index.jsp");    
+			requestDispatcher.include(request,response); 
+		}
+		out.close();
+	
+		
 	}
-
-	public static boolean validate(String name, String password) {
+	
+	public static boolean insertNewRecord () {
         boolean status = false;  
         Connection connection = null;  
         PreparedStatement preparedStatement = null;  
@@ -92,14 +94,27 @@ public class LoginServlet extends HttpServlet {
             Class.forName(driver).newInstance();  
             connection = DriverManager.getConnection(url + databaseName, dbUsername, dbPassword);  
   
-            preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE email=? AND password=PASSWORD(?)"); 
-            preparedStatement.setString(1, name);  
-            preparedStatement.setString(2, password);  
+            preparedStatement = connection.prepareStatement("INSERT INTO user "
+            		+ "(email, password, first_name, last_name, program_department, program, student_faculty)"
+            		+ "VALUES (?, PASSWORD(?), ?, ?, ?, ?, ?)"); 
+            preparedStatement.setString(1, email);  
+            preparedStatement.setString(2, password); 
+            preparedStatement.setString(3, firstName);
+            preparedStatement.setString(4, lastName);
+            preparedStatement.setString(5, programDepartment);
+            preparedStatement.setString(6, program);
+            if (studentOrFaculty == "student") {
+            	preparedStatement.setInt(7, 0);
+            } else if (studentOrFaculty == "faculty") {
+            	preparedStatement.setInt(7, 1);
+            } else {
+            	preparedStatement.setInt(7, 0);
+            }
   
-            resultSet = preparedStatement.executeQuery();
+            int updateStatus = preparedStatement.executeUpdate();
             // Method will return false when the entire table is traversed
-
-            status = resultSet.next();
+            if (updateStatus > 0)
+            	status = true;
   
         } catch (Exception e) {  
             System.out.println(e);  
@@ -130,6 +145,7 @@ public class LoginServlet extends HttpServlet {
             }  
         }
         // Return true or false status for if statement
-        return status;  
-    }  
+        return status;
+	}
+	
 }

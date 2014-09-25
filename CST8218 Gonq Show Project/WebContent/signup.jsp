@@ -7,7 +7,7 @@
 <title>Gonq Show Sign Up</title>
 </head>
 <body>
-	<form method="post" action="registration.jsp">
+	<form method="post" action="SignupServlet">
 	    <center>
 	    <table width="30%" cellpadding="5">
 			<thead>
@@ -31,6 +31,12 @@
 	                <td>Email</td>
 	                <td><input type="text" name="email" value="" size="40%"/></td>
 	            </tr>
+	            <tr>
+	            	<td>Student of Faculty</td>
+	            	<td><input type="radio" name="sf" value="student">Student <br />
+					<input type="radio" name="sf" value="faculty">Faculty
+					</td>
+	            </tr>
 	           	<tr>
 	            	<td>Department</td>
 	            	<td>
@@ -50,17 +56,27 @@
 					</td>
 	            </tr>
 	            <tr>
+	            	<td colspan="2">
+	            		About Me
+	            	</td> 
+	            </tr>
+	            <tr>
+	            	<td colspan="2">
+	            	<textarea name="aboutMe"cols="50" rows="4"></textarea>
+	            	</td>
+	            </tr>
+	            <tr>
 		            <td colspan="2">
 		            	<hr>
 		            </td>
 	            </tr>
 	            <tr>
-	                <td>User Name</td>
-	                <td><input type="text" name="username" value="" size="40%"/></td>
+	                <td>Password</td>
+	                <td><input type="password" name="password1" value="" size="40%"/></td>
 	            </tr>
 	            <tr>
-	                <td>Password</td>
-	                <td><input type="password" name="password" value="" size="40%"/></td>
+	                <td>Re-enter Password</td>
+	                <td><input type="password" name="password2" value="" size="40%"/></td>
 	            </tr>
 	            <tr>
 	                <td><input type="submit" value="Submit" /></td>

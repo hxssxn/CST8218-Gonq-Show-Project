@@ -7,30 +7,21 @@
 <title>Gonq Show Login</title>
 </head>
 <body>
-	<form method="post" action="login.jsp">
+	<center>
+	<h1>Welcome to the Gonq Show</h1>
+	</center>
+	<br />
+	<br />
+	<br />
+	<form method="post" action="LoginServlet">
 	    <center>
 	    <table width="30%" cellpadding="3">
-	        <thead>
-	            <tr>
-	                <th colspan="2">Login Here</th>
-	            </tr>
-	        </thead>
-	        <tbody>
-	            <tr>
-	                <td>User Name</td>
-	                <td><input type="text" name="uname" value="" /></td>
-	            </tr>
-	            <tr>
-	                <td>Password</td>
-	                <td><input type="password" name="pass" value="" /></td>
-	            </tr>
-	            <tr>
-	                <td><input type="submit" value="Login" /></td>
-	            </tr>
-	            <tr>
-	                <td colspan="2"> Not A Member!! <a href="signup.jsp">Sign Up Now!!</a></td>
-	            </tr>
-	        </tbody>
+	        <tr>
+			<td> Already A Member!!<a href="login.jsp">Login In Here!!</a></td>
+	        </tr>
+	        <tr>
+	        <td> Not A Member!! <a href="signup.jsp">Sign Up Now!!</a></td>
+	        </tr>
 	    </table>
 	    </center>
 	</form>
