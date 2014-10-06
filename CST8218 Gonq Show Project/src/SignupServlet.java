@@ -14,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class SignupServlet
@@ -69,6 +70,11 @@ public class SignupServlet extends HttpServlet {
 		
 		if (password1.equals(password2)){
 			if (insertNewRecord()) {
+				HttpSession session = request.getSession();
+				session.setAttribute("firstName", firstName);
+				session.setAttribute("lastName", lastName);
+				session.setAttribute("email", email);
+				session.setMaxInactiveInterval(30*60);
 				RequestDispatcher requestDispatcher = request.getRequestDispatcher("homepage.jsp");
 				requestDispatcher.forward(request,response);
 			} else {

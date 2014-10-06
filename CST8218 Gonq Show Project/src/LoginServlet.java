@@ -45,28 +45,21 @@ public class LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// WHAT DOES THIS DO?????????--------------------------------------------------------------------------------
 		response.setContentType("text/html");
-		// Object created to send error message if username or password is incorrect
+		// Object created to send error message if email or password is incorrect
 		PrintWriter out = response.getWriter();
 		
-		//Retrieve username and password from login.jsp
-		String username = request.getParameter("username");
+		//Retrieve email and password from login.jsp
+		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 		
-		// WHAT DOES THIS DO?????????--------------------------------------------------------------------------------
-		HttpSession session = request.getSession(false);
-		if (session != null)
-			session.setAttribute("name", username);
-		
-		// Validation of username and password successful
-		if (validate(username, password)) {
+		// Validation of email and password successful
+		if (validate(email, password)) {
+			setSession(email, request);
 			// Redirect to homepage.jsp
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("homepage.jsp");
-			// WHAT DOES THIS DO?????????--------------------------------------------------------------------------------
 			requestDispatcher.forward(request,response);  
-		// Validation of username and password returns error
+		// Validation of email and password returns error
 		} else {    
 			// Print error to index.jsp and then redirect to the page
 			out.print("<p style=\"color:red\">Sorry username or password error</p>");    
@@ -76,8 +69,64 @@ public class LoginServlet extends HttpServlet {
 		// Close PrintWriter object to prevent leaks
 		out.close(); 
 	}
-
-	public static boolean validate(String name, String password) {
+	
+	public static void setSession(String email, HttpServletRequest request) {
+        Connection connection = null;  
+        PreparedStatement preparedStatement = null;  
+        ResultSet resultSet = null;  
+  
+        String url = "jdbc:mysql://localhost:3306/";  
+        String databaseName = "gonqshowdb";  
+        String driver = "com.mysql.jdbc.Driver";  
+        String dbUsername = "gonqshow";  
+        String dbPassword = "gonqshow";  
+        try {  
+            Class.forName(driver).newInstance();  
+            connection = DriverManager.getConnection(url + databaseName, dbUsername, dbPassword);  
+  
+            preparedStatement = connection.prepareStatement("SELECT first_name, last_name FROM user WHERE email=?"); 
+            preparedStatement.setString(1, email);   
+  
+            resultSet = preparedStatement.executeQuery();
+			
+            // Set session
+			HttpSession session = request.getSession();
+			session.setAttribute("firstName", resultSet.getString(1));
+			session.setAttribute("lastName", resultSet.getString(2));
+			session.setAttribute("email", email);
+			session.setMaxInactiveInterval(30*60);
+            
+        } catch (Exception e) {  
+            System.out.println(e);  
+        } finally {
+        	// Close the connection to database
+            if (connection != null) {  
+                try {  
+                    connection.close();  
+                } catch (SQLException e) {  
+                    e.printStackTrace();  
+                }  
+            } 
+            // Close the Prepared Statement, releasing resources
+            if (preparedStatement != null) {  
+                try {  
+                    preparedStatement.close();  
+                } catch (SQLException e) {  
+                    e.printStackTrace();  
+                }  
+            }
+            // Close ResultSet, releasing resources
+            if (resultSet != null) {  
+                try {  
+                    resultSet.close();  
+                } catch (SQLException e) {  
+                    e.printStackTrace();  
+                }  
+            }  
+        }
+	}
+	
+	public static boolean validate(String email, String password) {
         boolean status = false;  
         Connection connection = null;  
         PreparedStatement preparedStatement = null;  
@@ -93,14 +142,14 @@ public class LoginServlet extends HttpServlet {
             connection = DriverManager.getConnection(url + databaseName, dbUsername, dbPassword);  
   
             preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE email=? AND password=PASSWORD(?)"); 
-            preparedStatement.setString(1, name);  
+            preparedStatement.setString(1, email);  
             preparedStatement.setString(2, password);  
   
             resultSet = preparedStatement.executeQuery();
             // Method will return false when the entire table is traversed
 
             status = resultSet.next();
-  
+            
         } catch (Exception e) {  
             System.out.println(e);  
         } finally {
