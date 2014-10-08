@@ -1,0 +1,79 @@
+body.frontBody
+{
+	background-color: rgb(245,245,245);
+}
+
+p.frontP
+{	
+	font: 12px/30px Georgia, serif
+	background-color:#009900;
+}
+
+div.frontContent
+{
+    position:fixed;
+    top: 40%;
+    left: 40%;
+    width:40em;
+    height:25em;
+    margin-top: -9em; /*set to a negative number 1/2 of your height*/
+    margin-left: -15em; /*set to a negative number 1/2 of your width*/
+    border: 1px solid #ccc;
+    background-color: #D8D8D8;
+}
+
+#main_menu {
+	position: fixed;
+	height: 100%;
+	width: 15%;
+	min-width: 150px;
+	left: 0px;
+	top: 0px;
+	opacity: 0.85;	
+	background-color: green;
+	color: yellow;
+	font-size: 125%;
+}
+
+#search_bar_field {width: 95%;}
+
+#search_bar_button {width: 10%; right: 0;}
+
+#wrap {
+	position: relative;
+	left: 15%;
+	width: 84%;
+	right: 0px;
+	background-image: url(brushed.png);	
+	margin: 0, 0, 0, 0;
+	padding: 0, 0, 0, 0;
+	min-height: 1000px;
+}
+
+#logout_button {
+	position: absolute;
+	right: 2px;
+	top: 14px;
+}
+#profile_button {
+	position: absolute;
+	right: 2px;
+}
+
+#search_bar {
+	position: absolute;
+	bottom: 0px;
+	width: 100%;
+}
+
+body{background-image: url(brushed.png);}
+
+a:link, a:visited {
+	color: purple;
+	text-decoration: underline;
+	cursor: auto;	
+}
+
+a:link, a:visited:active {color: yellow;}
+
+a:hover {color: red;}

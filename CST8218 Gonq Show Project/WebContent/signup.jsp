@@ -6,7 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Gonq Show Sign Up</title>
 </head>
-<body>
+<body class="frontBody">
+	<div class="frontContent">
 	<form method="post" action="SignupServlet">
 	    <center>
 	    <table width="30%" cellpadding="5">
@@ -85,5 +86,6 @@
 	    </table>
 	    </center>
 	</form>
+	</div>
 </body>
 </html>

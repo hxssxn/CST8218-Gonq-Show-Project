@@ -7,11 +7,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Gonq Show Welcome Page</title>
 	<%
-		if (session.getAttribute("firstName") == null || session.getAttribute("firstName") == "") {
-			response.sendRedirect("login.jsp");
-		}
-		
-		Class.forName("com.mysql.jdbc.Driver");
 		Connection connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/gonqshowdb", "gonqshow", "gonqshow");
 		
 		Statement statement = connect.createStatement();
@@ -31,29 +26,31 @@
 		}
 	%>
 </head>
-<div id=header> The Gonq Show</div>
-<body>
+<div id="main_menu"> <a id="profile_button" href="homepage.jsp"><%= session.getAttribute("first") %></a>
+		<a id="logout_button" href="LogoutServlet">Logout</a>
+				<div id="search_bar" align="left">
+					<form method="post" action=SearchServlet>
+						<table border="0">
+							<tr>
+								<td>
+									<input id="search_bar_field" type="text" name="Query" value="" size="40%"/>
+								</td>
+								<td>
+									<input type="submit" Value="Search">
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+</div>
+
+
+<body id=wrap>
 <%-- Welcome message and logout button --%>
 <b>Welcome <%=session.getAttribute("first") %></b>
 <br />
-<a href="LogoutServlet">Logout</a>
-
-<%-- Search Bar linking to users page which displays search results. --%>
-<div align="left">
-	<form method="post" action=SearchServlet>
-		<table width="150" border="0">
-			<tr>
-				<td>
-					<input type="text" name="Query" value="" size="40%"/>
-				</td>
-				<td>
-					<input type="submit" Value="Search">
-				</td>
-			</tr>
-		</table>
-	</form>
-<%-- Link to Users page  --%>
 <a href="users.jsp">User Page</a>
-</div>
+<%-- Search Bar linking to users page which displays search results. --%>
+
 </body>
 </html>
