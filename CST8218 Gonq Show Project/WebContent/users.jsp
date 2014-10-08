@@ -32,9 +32,9 @@
 	<br />
 		
 	<% 
-		if (session.getAttribute("firstName") == null || session.getAttribute("firstName") == "") {
+		/*if (session.getAttribute("firstName") == null || session.getAttribute("firstName") == "") {
 			response.sendRedirect("login.jsp");
-		}
+		}*/
 		
 		Class.forName("com.mysql.jdbc.Driver");
 		String connectionURL = "jdbc:mysql://localhost:3306/gonqshowdb";      

@@ -2,12 +2,12 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/Resource/style.css" />
+<link rel=stylesheet href="Resource/style.css" type="text/css">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Gonq Show</title>
 </head>
-<body class="frontBody">
+<body>
 <div class="frontContent">
 	<table>
 	<tr>

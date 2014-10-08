@@ -3,17 +3,21 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link rel=stylesheet href="Resources/style.css" type="text/css">
+<link rel=stylesheet href="Resource/style.css" type="text/css">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Gonq Show Welcome Page</title>
 	<%
 		Connection connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/gonqshowdb", "gonqshow", "gonqshow");
 		
-		Statement statement = connect.createStatement();
+	//	Statement statement = connect.createStatement();
 		
-		String seshEmail = request.getParameter("name");
+		String seshEmail = request.getParameter("email");
 		
-		ResultSet results = statement.executeQuery("select * from user where email = '" + session.getAttribute("name") + "'");
+		PreparedStatement statement = connect.prepareStatement("SELECT * FROM user WHERE email=?"); 
+        statement.setString(1, seshEmail); 
+		
+        ResultSet results = statement.executeQuery();
+        //ResultSet results = statement.executeQuery("select * from user where email = " + session.getAttribute("email"));
 		
 		if(!results.next())
 		{
