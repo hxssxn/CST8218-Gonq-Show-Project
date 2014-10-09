@@ -1,7 +1,6 @@
 p.frontP
 {	
-	font: 12px/30px Georgia, serif
-	background-color:#009900;
+	font: 12px/30px Georgia, serif;
 }
 
 div.frontContent
@@ -9,10 +8,21 @@ div.frontContent
     position:fixed;
     top: 40%;
     left: 40%;
-    width:40em;
-    height:25em;
-    margin-top: -9em; /*set to a negative number 1/2 of your height*/
-    margin-left: -15em; /*set to a negative number 1/2 of your width*/
+    width:550px;
+    height:350px;
+    margin-top: -9em;
+    margin-left: -10em;
+    border: 1px solid #ccc;
+    background-color: #D8D8D8;
+}
+
+div.signUpContent
+{
+	position:fixed;
+	top: 0%;
+    left: 30%;
+    width:500px;
+    height:100%;
     border: 1px solid #ccc;
     background-color: #D8D8D8;
 }

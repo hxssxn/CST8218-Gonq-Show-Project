@@ -9,15 +9,12 @@
 	<%
 		Connection connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/gonqshowdb", "gonqshow", "gonqshow");
 		
-	//	Statement statement = connect.createStatement();
-		
 		String seshEmail = request.getParameter("email");
 		
 		PreparedStatement statement = connect.prepareStatement("SELECT * FROM user WHERE email=?"); 
         statement.setString(1, seshEmail); 
 		
         ResultSet results = statement.executeQuery();
-        //ResultSet results = statement.executeQuery("select * from user where email = " + session.getAttribute("email"));
 		
 		if(!results.next())
 		{

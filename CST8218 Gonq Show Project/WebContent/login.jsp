@@ -9,6 +9,7 @@
 </head>
 <body>
 <div class="frontContent">
+	<br/>
 	<form method="post" action="LoginServlet">
 	    <table>
 	       	<tr>
@@ -24,7 +25,8 @@
 	            <td><input type="password" name="password" value="" /></td>
 	        </tr>
 	        <tr>
-	            <td align="center"><input type="submit" value="Login" /></td>
+	        	<td></td>
+	            <td><input type="submit" value="Login" /></td>
 	        </tr>
 	        <tr>
 	            <td colspan="2"> Not A Member? <a href="signup.jsp">Sign Up Now!</a></td>

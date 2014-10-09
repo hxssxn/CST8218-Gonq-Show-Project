@@ -2,12 +2,13 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
+<link rel=stylesheet href="Resource/style.css" type="text/css">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Gonq Show Sign Up</title>
 </head>
-<body class="frontBody">
-	<div class="frontContent">
+<body>
+	<div class="signUpContent">
 	<form method="post" action="SignupServlet">
 	    <center>
 	    <table width="30%" cellpadding="5">
@@ -18,7 +19,7 @@
 			</thead>
 	        <tbody>
 	        	<tr>
-	                <td colspan="2">Already A Member? <a href="index.jsp">Login Here</a></td>
+	                <td colspan="2">Already A Member? <a href="login.jsp">Login Here</a></td>
 	            </tr>
 	            <tr>
 	                <td>First Name</td>
@@ -80,6 +81,7 @@
 	                <td><input type="password" name="password2" value="" size="40%"/></td>
 	            </tr>
 	            <tr>
+	            	<td></td>
 	                <td><input type="submit" value="Submit" /></td>
 	            </tr>
 	        </tbody>
