@@ -11,7 +11,7 @@
 <div class="frontContent">
 	<table>
 	<tr>
-		<td rowspan="5" class="frontLeftSide"> <br/> <img src="${pageContext.request.contextPath}/Resource/logo.png" alt="GonQ Show" width=300 height=300> </td>
+		<td rowspan="5" class="frontLeftSide"> <br/> <img src="Resource/logo.png" alt="GonQ Show" width=300 height=300> </td>
 		<td colspan="2"> <p class="frontP">Welcome to the Gonq Show </p></td>
 	</tr>
 	<tr>

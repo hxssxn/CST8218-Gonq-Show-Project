@@ -20,9 +20,10 @@ div.signUpContent
 {
 	position:fixed;
 	top: 0%;
-    left: 30%;
+    left: 40%;
     width:500px;
     height:100%;
+    margin-left:-8em;
     border: 1px solid #ccc;
     background-color: #D8D8D8;
 }

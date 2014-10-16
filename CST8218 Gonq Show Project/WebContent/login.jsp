@@ -13,7 +13,7 @@
 	<form method="post" action="LoginServlet">
 	    <table>
 	       	<tr>
-				<td rowspan="5" class="frontLeftSide"> <img src="${pageContext.request.contextPath}/Resource/logo.png" alt="GonQ Show" width=300 height=300> </td>
+				<td rowspan="5" class="frontLeftSide"> <img src="Resource/logo.png" alt="GonQ Show" width=300 height=300> </td>
 				<td colspan="2"> Login Here </td>
 			</tr>
 	        <tr>
