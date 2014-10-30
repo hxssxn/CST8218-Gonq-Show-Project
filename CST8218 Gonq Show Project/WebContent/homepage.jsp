@@ -71,25 +71,30 @@
 <div id="ProfileInfo">
 	<table>
 		<tr>
-			<td><b>Name: </b></td>
-			<td><%=session.getAttribute("first") + " " + session.getAttribute("last") %></td>
-		</tr>
-		<tr>
-			<td><b>Position: </b></td>
-			<td><%=session.getAttribute("stud") %>
-		</tr>
-		<tr>
-			<td><b>Department: </b></td>
-			<td><%=session.getAttribute("dep") %></td>
-		</tr>
-		<tr>
-			<td><b>Program: </b></td>
-			<td><%=session.getAttribute("prog") %></td>
-		</tr>
-		<tr>
-			<td><b>About: </b></td>
-			<td><%=session.getAttribute("about") %></td>
-		</tr>
+			<td><img src="Resource/profileDefault.jpg" alt="Profile Picture" style="width:175px;height:200px"></td>
+			<td><table>
+			<tr>
+				<td><b>Name: </b></td>
+				<td><%=session.getAttribute("first") + " " + session.getAttribute("last") %></td>
+			</tr>
+			<tr>
+				<td><b>Position: </b></td>
+				<td><%=session.getAttribute("stud") %>
+			</tr>
+			<tr>
+				<td><b>Department: </b></td>
+				<td><%=session.getAttribute("dep") %></td>
+			</tr>
+			<tr>
+				<td><b>Program: </b></td>
+				<td><%=session.getAttribute("prog") %></td>
+			</tr>
+			<tr>
+				<td><b>About: </b></td>
+				<td><%=session.getAttribute("about") %></td>
+			</tr>
+		</table></td>
+	</tr>
 	</table>
 </div>
 <hr>
@@ -103,7 +108,7 @@
 			{
 				System.out.println(results.getString(2));
 			} -->
-	<% if(request.getSession().getAttribute("message") != null ){ request.getSession().getAttribute("message"); } %>
+	<% if(session.getAttribute("message") != null ){%><%=session.getAttribute("message")%><% } %>
 	<form action="UploadServlet" method="post" enctype="multipart/form-data">
 		<input type="file" name="file" size="50" /><br />
 		<input type="submit" value="Upload File" />
