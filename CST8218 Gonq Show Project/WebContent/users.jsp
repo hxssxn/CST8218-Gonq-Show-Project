@@ -38,7 +38,7 @@
 		
 		Class.forName("com.mysql.jdbc.Driver");
 		String connectionURL = "jdbc:mysql://localhost:3306/gonqshowdb";      
-		Connection connection = DriverManager.getConnection(connectionURL, "gonqshow", "gonqshow");	
+		Connection connection = DriverManager.getConnection(connectionURL, "root", "root");	
 		Statement statement = connection.createStatement();
 		ResultSet resultset = statement.executeQuery("select first_name, last_name, program, about_me, email from user") ; 
 	%>

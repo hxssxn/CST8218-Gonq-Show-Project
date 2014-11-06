@@ -38,7 +38,9 @@ public class LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		response.setContentType("text/html");
+		request.getRequestDispatcher("homepage.jsp").include(request, response);
+		//response.sendRedirect("homepage.jsp?language=" + request.getSession().getAttribute("language"));
 	}
 
 	/**
@@ -57,14 +59,15 @@ public class LoginServlet extends HttpServlet {
 		if (validate(email, password)) {
 			setSession(email, request);
 			// Redirect to homepage.jsp
-			RequestDispatcher requestDispatcher = request.getRequestDispatcher("homepage.jsp");
-			requestDispatcher.forward(request,response);  
+			//RequestDispatcher requestDispatcher = request.getRequestDispatcher("homepage.jsp?language=" + request.getSession().getAttribute("language"));
+			request.getRequestDispatcher("homepage.jsp").forward(request, response);
+			// This line should work :( ---- response.sendRedirect("homepage.jsp?language=" + request.getSession().getAttribute("language"));
+			//requestDispatcher.forward(request,response);  
 		// Validation of email and password returns error
 		} else {    
 			// Print error to index.jsp and then redirect to the page
-			out.print("<p style=\"color:red\">Sorry username or password error</p>");    
-			RequestDispatcher requestDispatcher=request.getRequestDispatcher("index.jsp");    
-			requestDispatcher.include(request,response);    
+			request.getSession().setAttribute("invalidLogin", true);
+			response.sendRedirect("index.jsp?language=" + request.getSession().getAttribute("language"));
 		}
 		// Close PrintWriter object to prevent leaks
 		out.close(); 
@@ -78,8 +81,8 @@ public class LoginServlet extends HttpServlet {
         String url = "jdbc:mysql://localhost:3306/";  
         String databaseName = "gonqshowdb";  
         String driver = "com.mysql.jdbc.Driver";  
-        String dbUsername = "gonqshow";  
-        String dbPassword = "gonqshow";  
+        String dbUsername = "root";  
+        String dbPassword = "root";  
         try {  
             Class.forName(driver).newInstance();  
             connection = DriverManager.getConnection(url + databaseName, dbUsername, dbPassword);  
@@ -88,6 +91,7 @@ public class LoginServlet extends HttpServlet {
             preparedStatement.setString(1, email);   
   
             resultSet = preparedStatement.executeQuery();
+            resultSet.first(); // Required to place the cursor at the beginning of the result set, gets rid of SQLException
 			
             // Set session
 			HttpSession session = request.getSession();
@@ -135,8 +139,8 @@ public class LoginServlet extends HttpServlet {
         String url = "jdbc:mysql://localhost:3306/";  
         String databaseName = "gonqshowdb";  
         String driver = "com.mysql.jdbc.Driver";  
-        String dbUsername = "gonqshow";  
-        String dbPassword = "gonqshow";  
+        String dbUsername = "root";  
+        String dbPassword = "root";  
         try {  
             Class.forName(driver).newInstance();  
             connection = DriverManager.getConnection(url + databaseName, dbUsername, dbPassword);  

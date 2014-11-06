@@ -1,5 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="java.sql.*" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" import="java.sql.*" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
+<fmt:setLocale value="${language}" scope="session" />
+<fmt:setBundle basename="Messages" />
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -7,7 +11,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Gonq Show Welcome Page</title>
 	<%
-		Connection connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/gonqshowdb", "gonqshow", "gonqshow");
+		Connection connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/gonqshowdb", "root", "root");
 		
 		String seshEmail = request.getParameter("email");
 		
@@ -43,7 +47,7 @@
 	%>
 </head>
 <div id="main_menu">
-		<a id="logout_button" href="LogoutServlet">Logout</a>
+		<a id="logout_button" href="LogoutServlet"><fmt:message key="home.logoutButton" /></a>
 				<div id="search_bar" align="left">
 					<form method="post" action=SearchServlet>
 						<table border="0">
@@ -52,7 +56,7 @@
 									<input id="search_bar_field" type="text" name="Query" value="" size="40%"/>
 								</td>
 								<td>
-									<input type="submit" Value="Search">
+									<input type="submit" Value=<fmt:message key="home.searchButton"/> >
 								</td>
 							</tr>
 						</table>
@@ -63,9 +67,9 @@
 
 <body id=wrap>
 <%-- Welcome message and link to user page --%>
-<b>Welcome <%=session.getAttribute("first") %></b>
+<b><label for="Welcome"><fmt:message key="home.title" /></label> <%=session.getAttribute("first") %></b>
 <br />
-<a href="users.jsp">User Page</a>
+<a href="users.jsp"><fmt:message key="home.userPageLink"/></a>
 <%-- Search Bar linking to users page which displays search results. --%>
 <hr>
 <div id="ProfileInfo">
@@ -74,23 +78,23 @@
 			<td><img src="Resource/profileDefault.jpg" alt="Profile Picture" style="width:175px;height:200px"></td>
 			<td><table>
 			<tr>
-				<td><b>Name: </b></td>
+				<td><b><label for="Name"><fmt:message key="home.nameLabel" /></label> </b></td>
 				<td><%=session.getAttribute("first") + " " + session.getAttribute("last") %></td>
 			</tr>
 			<tr>
-				<td><b>Position: </b></td>
+				<td><b><label for="Position"><fmt:message key="home.positionLabel" /></label></b></td>
 				<td><%=session.getAttribute("stud") %>
 			</tr>
 			<tr>
-				<td><b>Department: </b></td>
+				<td><b><label for="Department"><fmt:message key="home.departmentLabel" /></label></b></td>
 				<td><%=session.getAttribute("dep") %></td>
 			</tr>
 			<tr>
-				<td><b>Program: </b></td>
+				<td><b><label for="Program"><fmt:message key="home.programLabel" /></label></b></td>
 				<td><%=session.getAttribute("prog") %></td>
 			</tr>
 			<tr>
-				<td><b>About: </b></td>
+				<td><b><label for="About"><fmt:message key="home.aboutLabel" /></label></b></td>
 				<td><%=session.getAttribute("about") %></td>
 			</tr>
 		</table></td>
@@ -110,12 +114,12 @@
 			} -->
 	<% if(session.getAttribute("message") != null ){%><%=session.getAttribute("message")%><% } %>
 	<form action="UploadServlet" method="post" enctype="multipart/form-data">
-		<input type="file" name="file" size="50" /><br />
-		<input type="submit" value="Upload File" />
+		<input type="file" name="file" size="50"/><br />
+		<input type="submit" value=<fmt:message key="home.uploadButton"/> />
 	</form>
 	<table>
 		<%
-		//Connection connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/gonqshowdb", "gonqshow", "gonqshow");
+		//Connection connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/gonqshowdb", "root", "root");
 		
 		PreparedStatement testState = connect.prepareStatement("SELECT * FROM content WHERE user_email=(?)");
 		testState.setString(1, session.getAttribute("email").toString());

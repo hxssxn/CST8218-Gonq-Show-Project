@@ -98,8 +98,8 @@ public class SignupServlet extends HttpServlet {
         String url = "jdbc:mysql://localhost:3306/";  
         String databaseName = "gonqshowdb";  
         String driver = "com.mysql.jdbc.Driver";  
-        String dbUsername = "gonqshow";  
-        String dbPassword = "gonqshow";  
+        String dbUsername = "root";  
+        String dbPassword = "root";  
         try {  
             Class.forName(driver).newInstance();  
             connection = DriverManager.getConnection(url + databaseName, dbUsername, dbPassword);  

@@ -84,7 +84,7 @@ public class UploadServlet extends HttpServlet
 							item.getName().contains(".jpg") || item.getName().contains(".jpeg") || item.getName().contains(".bmp") || item.getName().contains(".png") )
 					{
 						//Check for valid file size (less than 5MB)
-						if((item.getSize() / 1024) / 1024 <= 5)
+						if(((item.getSize() / 1024) / 1024) <= 5)
 						{
 							if(!item.isFormField())
 							{
@@ -151,6 +151,10 @@ public class UploadServlet extends HttpServlet
 								request.getSession().setAttribute("message", "File Uploaded Successfully");
 							}
 						}
+						else
+						{
+							request.getSession().setAttribute("message", "File Too Large (5MB Limit)");
+						}
 					}
 					else
 					{
@@ -184,7 +188,7 @@ public class UploadServlet extends HttpServlet
 	{
 		if (request.getSession().getAttribute("message").toString().equals("File Uploaded Successfully"))
 		{
-			Connection connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/gonqshowdb", "gonqshow", "gonqshow");
+			Connection connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/gonqshowdb", "root", "root");
 			
 			userEmail = request.getSession().getAttribute("email").toString();
 			

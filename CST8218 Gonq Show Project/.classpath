@@ -15,6 +15,6 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="lib" path="C:/Program Files/Java/jre1.8.0_20/lib/ext/ojdbc7.jar"/>
 	<classpathentry kind="lib" path="C:/Program Files/i2p/lib/jstl.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files (x86)/MySQL/mysql-connector-java-5.1.0/mysql-connector-java-5.1.0-bin.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/NetBeans 7.4/ide/modules/ext/mysql-connector-java-5.1.23-bin.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
