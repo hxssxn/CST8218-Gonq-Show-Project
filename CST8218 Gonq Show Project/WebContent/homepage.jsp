@@ -11,7 +11,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Gonq Show Welcome Page</title>
 	<%
-		Connection connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/gonqshowdb", "root", "root");
+		Connection connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/gonqshowdb", "gonqshow", "gonqshow");
 		
 		String seshEmail = request.getParameter("email");
 		
@@ -46,24 +46,7 @@
 		}
 	%>
 </head>
-<div id="main_menu">
-		<a id="logout_button" href="LogoutServlet"><fmt:message key="home.logoutButton" /></a>
-				<div id="search_bar" align="left">
-					<form method="post" action=SearchServlet>
-						<table border="0">
-							<tr>
-								<td>
-									<input id="search_bar_field" type="text" name="Query" value="" size="40%"/>
-								</td>
-								<td>
-									<input type="submit" Value=<fmt:message key="home.searchButton"/> >
-								</td>
-							</tr>
-						</table>
-					</form>
-				</div>
-</div>
-
+<%@include file="menu.jsp" %>
 
 <body id=wrap>
 <%-- Welcome message and link to user page --%>
@@ -126,11 +109,14 @@
 		
 		results = testState.executeQuery();
 		
+		//TODO: Content will be fileName, navigate to Content/ userEmail / + fileName to open file/photo
 		while( results.next() )
 		{
+			
+
 			%><tr><td>
-			<%=results.getString(2)	//Type
-			%></td></tr>
+			<img src="Resource/<%= results.getString(2).toLowerCase() %>Icon.png" />
+			</td></tr>
 			<tr><td>
 			<%=results.getString(4)	//Content
 			%></td></tr>

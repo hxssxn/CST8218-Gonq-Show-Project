@@ -13,8 +13,8 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="C:/Program Files/Java/jre1.8.0_20/lib/ext/ojdbc7.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files/i2p/lib/jstl.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files/NetBeans 7.4/ide/modules/ext/mysql-connector-java-5.1.23-bin.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Kate/git/CST8218-Gonq-Show-Project/CST8218 Gonq Show Project/ojdbc7.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Kate/git/CST8218-Gonq-Show-Project/CST8218 Gonq Show Project/jstl.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Kate/git/CST8218-Gonq-Show-Project/CST8218 Gonq Show Project/mysql-connector-java-5.1.23-bin.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

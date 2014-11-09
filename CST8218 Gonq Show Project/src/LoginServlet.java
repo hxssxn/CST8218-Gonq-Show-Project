@@ -9,7 +9,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -81,8 +80,8 @@ public class LoginServlet extends HttpServlet {
         String url = "jdbc:mysql://localhost:3306/";  
         String databaseName = "gonqshowdb";  
         String driver = "com.mysql.jdbc.Driver";  
-        String dbUsername = "root";  
-        String dbPassword = "root";  
+        String dbUsername = "gonqshow";  
+        String dbPassword = "gonqshow";  
         try {  
             Class.forName(driver).newInstance();  
             connection = DriverManager.getConnection(url + databaseName, dbUsername, dbPassword);  
@@ -139,8 +138,8 @@ public class LoginServlet extends HttpServlet {
         String url = "jdbc:mysql://localhost:3306/";  
         String databaseName = "gonqshowdb";  
         String driver = "com.mysql.jdbc.Driver";  
-        String dbUsername = "root";  
-        String dbPassword = "root";  
+        String dbUsername = "gonqshow";  
+        String dbPassword = "gonqshow";  
         try {  
             Class.forName(driver).newInstance();  
             connection = DriverManager.getConnection(url + databaseName, dbUsername, dbPassword);  

@@ -188,30 +188,26 @@ public class UploadServlet extends HttpServlet
 	{
 		if (request.getSession().getAttribute("message").toString().equals("File Uploaded Successfully"))
 		{
-			Connection connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/gonqshowdb", "root", "root");
+			String driver = "com.mysql.jdbc.Driver";  
+	        try {
+				Class.forName(driver).newInstance();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			Connection connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/gonqshowdb", "gonqshow", "gonqshow");
 			
 			userEmail = request.getSession().getAttribute("email").toString();
 			
 			PreparedStatement statement = connect.prepareStatement("INSERT INTO content (date_time, content, user_email, type) VALUES (?,?,?,?)");
 			statement.setTimestamp(1, dateTime);
-			statement.setString(2, newFile.getAbsolutePath());
+			statement.setString(2, newFile.getName());
 			statement.setString(3, userEmail);
 			statement.setString(4, fileType);
 			
 			statement.executeUpdate();
 	        
 			request.getSession().setAttribute("email", userEmail);
-			
-			/*Testing if files have been inserted properly
-			PreparedStatement testState = connect.prepareStatement("SELECT * FROM content WHERE user_email=(?)");
-			testState.setString(1, userEmail);
-			
-			ResultSet results = testState.executeQuery();
-			
-			while( results.next() )
-			{
-				System.out.println(results.getString(2));
-			}*/
 		}
 		
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("homepage.jsp");

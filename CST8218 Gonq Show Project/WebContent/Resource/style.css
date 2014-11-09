@@ -45,15 +45,32 @@ div.signUpContent
 
 #search_bar_button {width: 10%; right: 0;}
 
-#wrap {
-	position: relative;
-	left: 15%;
-	width: 84%;
-	right: 0px;
-	background-image: url(brushed.png);	
-	margin: 0, 0, 0, 0;
-	padding: 0, 0, 0, 0;
-	min-height: 1000px;
+@media screen and (min-width: 1001px)
+{
+	#wrap
+	{
+		position: relative;
+		left: 15%;
+		max-width: 84%;
+		right: 0px;
+		background-image: url(brushed.png);	
+		margin: 0, 0, 0, 0;
+		padding: 0, 0, 0, 0;
+		min-height: 1000px;
+	}
+}
+
+@media screen and (max-width: 1000px)
+{
+	#wrap
+	{
+		position: absolute;
+		left: 150px;
+		background-image: url(brushed.png);	
+		margin: 0, 0, 0, 0;
+		padding: 0, 0, 0, 0;
+		min-height: 1000px;
+	}
 }
 
 #logout_button {
