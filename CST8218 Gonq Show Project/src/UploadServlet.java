@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
@@ -37,9 +38,12 @@ public class UploadServlet extends HttpServlet
 	private String userEmail;
 	//Type of file (document or image)
 	private String fileType;
+	//Content for posts/comments
+	private String content;
 	//File
 	private File newFile = null;
-	
+	//Booleans to determine what has been submitted
+	private boolean pic, comment;
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -63,6 +67,9 @@ public class UploadServlet extends HttpServlet
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		pic = false;
+		comment = false;
+		
 		//Process only if its multipart content
 		if(ServletFileUpload.isMultipartContent(request))
 		{
@@ -76,90 +83,106 @@ public class UploadServlet extends HttpServlet
 				path = request.getSession().getServletContext().getRealPath(request.getServletPath());
 				//Go up on level, navigate to "Content" and the user's folder
 				path = new File(path).getParentFile().getPath() + "/Content/" + request.getSession().getAttribute("email") + "/";
-			
+				
 				for(FileItem item : multiparts)
 				{
-					//Check for valid file extension
-					if (item.getName().contains(".doc") || item.getName().contains(".txt") || item.getName().contains(".rtf") ||
-							item.getName().contains(".jpg") || item.getName().contains(".jpeg") || item.getName().contains(".bmp") || item.getName().contains(".png") )
+					if (!item.isFormField())
 					{
-						//Check for valid file size (less than 5MB)
-						if(((item.getSize() / 1024) / 1024) <= 5)
+						if (item.getName() != "")
 						{
-							if(!item.isFormField())
+							//Check for valid file extension
+							if (item.getName().contains(".doc") || item.getName().contains(".txt") || item.getName().contains(".rtf") ||
+									item.getName().contains(".jpg") || item.getName().contains(".jpeg") || item.getName().contains(".bmp") || item.getName().contains(".png") )
 							{
-								String ext = null;
-								
-								if (item.getName().contains(".docx"))
+								//Check for valid file size (less than 5MB)
+								if(((item.getSize() / 1024) / 1024) <= 5)
 								{
-									ext = ".docx";
-									fileType = "document";
-								}
-								else if (item.getName().contains(".doc"))
-								{
-									ext = ".doc";
-									fileType = "document";
-								}
-								else if (item.getName().contains(".txt"))
-								{
-									ext = ".txt";
-									fileType = "document";
-								}
-								else if (item.getName().contains(".rtf"))
-								{
-									ext = ".rtf";
-									fileType = "document";
-								}
-								else if(item.getName().contains(".jpg"))
-								{
-									ext = ".jpg";
-									fileType = "image";
-								}
-								else if(item.getName().contains(".jpeg"))
-								{
-									ext = ".jpeg";
-									fileType = "image";
-								}
-								else if(item.getName().contains(".bmp"))
-								{
-									ext = ".bmp";
-									fileType = "image";
+									if(!item.isFormField())
+									{
+										String ext = null;
+										
+										if (item.getName().contains(".docx"))
+										{
+											ext = ".docx";
+											fileType = "document";
+										}
+										else if (item.getName().contains(".doc"))
+										{
+											ext = ".doc";
+											fileType = "document";
+										}
+										else if (item.getName().contains(".txt"))
+										{
+											ext = ".txt";
+											fileType = "document";
+										}
+										else if (item.getName().contains(".rtf"))
+										{
+											ext = ".rtf";
+											fileType = "document";
+										}
+										else if(item.getName().contains(".jpg"))
+										{
+											ext = ".jpg";
+											fileType = "image";
+										}
+										else if(item.getName().contains(".jpeg"))
+										{
+											ext = ".jpeg";
+											fileType = "image";
+										}
+										else if(item.getName().contains(".bmp"))
+										{
+											ext = ".bmp";
+											fileType = "image";
+										}
+										else
+										{
+											//.png
+											ext = ".png";
+											fileType = "image";
+										}
+										
+										dateTime = new Timestamp(System.currentTimeMillis());
+										newFile = new File(path + dateTime.getTime() + ext);
+										
+										if(!newFile.getParentFile().exists())
+										{
+											newFile.getParentFile().mkdir();
+										}
+										
+										if(!newFile.exists())
+										{
+											newFile.createNewFile();
+										}
+										
+										item.write(newFile);
+										
+										//File uploaded successfully
+										request.getSession().setAttribute("message", "File Uploaded Successfully");
+										
+										pic = true;
+									}
 								}
 								else
 								{
-									//.png
-									ext = ".png";
-									fileType = "image";
+									request.getSession().setAttribute("message", "File Too Large (5MB Limit)");
 								}
-								
-								dateTime = new Timestamp(System.currentTimeMillis());
-								newFile = new File(path + dateTime.getTime() + ext);
-								
-								if(!newFile.getParentFile().exists())
-								{
-									newFile.getParentFile().mkdir();
-								}
-								
-								if(!newFile.exists())
-								{
-									newFile.createNewFile();
-								}
-								
-								item.write(newFile);
-								
-								//File uploaded successfully
-								request.getSession().setAttribute("message", "File Uploaded Successfully");
 							}
-						}
-						else
-						{
-							request.getSession().setAttribute("message", "File Too Large (5MB Limit)");
+							else
+							{
+								//Invalid file type
+								request.getSession().setAttribute("message", "File Type Not Supported");
+							}
 						}
 					}
 					else
 					{
-						//Invalid file type
-						request.getSession().setAttribute("message", "File Type Not Supported");
+						if (!item.getString().isEmpty())
+						{
+							content = item.getString();
+							comment = true;
+						}
 					}
 				}
 			}
@@ -186,7 +209,7 @@ public class UploadServlet extends HttpServlet
 	
 	public void insertNewContent(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException
 	{
-		if (request.getSession().getAttribute("message").toString().equals("File Uploaded Successfully"))
+		if ( pic == true || comment == true )
 		{
 			String driver = "com.mysql.jdbc.Driver";  
 	        try {
@@ -199,13 +222,58 @@ public class UploadServlet extends HttpServlet
 			
 			userEmail = request.getSession().getAttribute("email").toString();
 			
-			PreparedStatement statement = connect.prepareStatement("INSERT INTO content (date_time, content, user_email, type) VALUES (?,?,?,?)");
-			statement.setTimestamp(1, dateTime);
-			statement.setString(2, newFile.getName());
-			statement.setString(3, userEmail);
-			statement.setString(4, fileType);
+			PreparedStatement statement;
 			
-			statement.executeUpdate();
+			if ( pic == true && comment == true )
+			{
+				statement = connect.prepareStatement("INSERT INTO content (date_time, content, user_email, type) VALUES (?,?,?,?)");
+				statement.setTimestamp(1, dateTime);
+				statement.setString(2, newFile.getName());
+				statement.setString(3, userEmail);
+				statement.setString(4, fileType);
+				
+				statement.executeUpdate();
+				statement.close();
+				
+				statement = connect.prepareStatement("SELECT * FROM content WHERE content=?");
+				statement.setString(1, newFile.getName());
+				
+				ResultSet results = statement.executeQuery();
+				
+				while(results.next())
+				{
+					String id = results.getString(1);
+				
+					statement = connect.prepareStatement("INSERT INTO content (date_time, content, user_email, type, on_id) VALUES (?,?,?,?,?)");
+					statement.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
+					statement.setString(2, content);
+					statement.setString(3, userEmail);
+					statement.setString(4, "comment");
+					statement.setString(5, id);
+					
+					statement.executeUpdate();
+				}
+			}
+			else if ( pic == true )
+			{
+				statement = connect.prepareStatement("INSERT INTO content (date_time, content, user_email, type) VALUES (?,?,?,?)");
+				statement.setTimestamp(1, dateTime);
+				statement.setString(2, newFile.getName());
+				statement.setString(3, userEmail);
+				statement.setString(4, fileType);
+				
+				statement.executeUpdate();
+			}
+			else if ( comment == true )
+			{
+				statement = connect.prepareStatement("INSERT INTO content (date_time, content, user_email, type) VALUES (?,?,?,?)");
+				statement.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
+				statement.setString(2, content);
+				statement.setString(3, userEmail);
+				statement.setString(4, "post");
+				
+				statement.executeUpdate();
+			}
 	        
 			request.getSession().setAttribute("email", userEmail);
 		}

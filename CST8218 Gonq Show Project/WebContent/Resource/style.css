@@ -28,6 +28,11 @@ div.signUpContent
     background-color: #D8D8D8;
 }
 
+a.imgLink:hover
+{
+	cursor: pointer;
+}
+
 #main_menu {
 	position: fixed;
 	height: 100%;
@@ -87,6 +92,17 @@ div.signUpContent
 	position: absolute;
 	bottom: 0px;
 	width: 100%;
+}
+
+#contentBreak
+{
+	color: lightgrey;
+}
+
+.contentTable
+{
+	border: 2px groove lightgrey;
+	width: 98%;
 }
 
 body{background-image: url(brushed.png);}
