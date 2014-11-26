@@ -13,11 +13,11 @@
 	<%
 		Connection connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/gonqshowdb", "gonqshow", "gonqshow");
 		
-		String seshEmail = request.getParameter("email");
+		String seshEmail = request.getParameter("emailLogin");
 		
 		if (seshEmail == null)
 		{
-			seshEmail = request.getSession().getAttribute("email").toString();
+			seshEmail = request.getSession().getAttribute("emailLogin").toString();
 		}
 		
 		PreparedStatement statement = connect.prepareStatement("SELECT * FROM user WHERE email=?"); 
@@ -56,7 +56,6 @@
 <%-- Welcome message and link to user page --%>
 <b><label for="Welcome"><fmt:message key="home.title" /></label> <%=session.getAttribute("first") %></b>
 <br />
-<a href="users.jsp"><fmt:message key="home.userPageLink"/></a>
 <%-- Search Bar linking to users page which displays search results. --%>
 <hr>
 <div id="ProfileInfo">
@@ -64,7 +63,7 @@
 		<tr>
 			<td>
 			<% if( session.getAttribute("picture") == null ) { %><img src="Resource/profileDefault.jpg" alt="Profile Picture" style="width:175px;height:200px"> <% }
-			else { %><img src="Content/<%=session.getAttribute("email").toString() + "/" + session.getAttribute("picture").toString()%>" /><% } %></td>
+			else { %><img class=profilePic src="Content/<%=session.getAttribute("email").toString() + "/" + session.getAttribute("picture").toString()%>" /><% } %></td>
 			<td><table>
 			<tr>
 				<td><b><label for="Name"><fmt:message key="home.nameLabel" /></label> </b></td>
@@ -138,11 +137,13 @@
 			<%} %>
 			<% if(results.getString(2).toLowerCase().matches("post")){ %>
 			<%=results.getString(4)	//Content
-			%><% } %></td></tr>
+			%><% } %></td>
+			<td align="right"><a class=imgLink href="DeletePostServlet.java?<%=results.getString(1)%>"><img src="Resource/deleteIcon.png" /></a></td></tr>
 			<tr><td>
 			<%=results.getString(5)
 			%></td></tr>
-			<tr><td><img src="Resource/commentIcon.png" /></td></tr>
+			<tr><td><a href="ViewPost.jsp?<%=results.getString(1)%>" class=imgLink><img src="Resource/commentIcon.png" /></a></td></tr>
+			<tr><td colspan="2"><hr class="commentDivide"></td></tr>
 			<% testState = connect.prepareStatement("SELECT * FROM content WHERE on_id = (?) ORDER BY date_time ASC");
 			testState.setString(1, results.getString(1));
 			
@@ -152,13 +153,13 @@
 			{
 				%>
 				<tr>
-					<td><%=commentResults.getString(3) %></td>
+					<td class=darkBack colspan="2"><%=commentResults.getString(3) %></td>
 				</tr>
 				<tr>
-					<td><%=commentResults.getString(4) %></td>
+					<td class=lightBack colspan="2"><%=commentResults.getString(4) %></td>
 				</tr>
 				<tr>
-					<td><%=commentResults.getString(5) %></td>
+					<td class=darkBack colspan="2"><%=commentResults.getString(5) %></td>
 				</tr>
 				<%
 			}

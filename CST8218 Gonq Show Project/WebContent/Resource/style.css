@@ -92,17 +92,58 @@ a.imgLink:hover
 	position: absolute;
 	bottom: 0px;
 	width: 100%;
+	height: 40px;
+}
+
+#MenuUsers
+{
+	position: absolute;
+	top: 40px;
+	bottom: 40px;
+	width: 90%;
+	left: 5%;
+	background-color: lightgreen;
 }
 
 #contentBreak
 {
 	color: lightgrey;
+	background-color: grey;
+	height: 3px;
 }
 
 .contentTable
 {
 	border: 2px groove lightgrey;
 	width: 98%;
+}
+
+.commentDivide
+{
+	border-style: dashed;
+	height: 1px;
+}
+
+.profilePic
+{
+	max-width: 200px;
+	max-height: 300px;
+}
+
+.miniProfilePic
+{
+	max-width: 30px;
+	max-height: 30px;
+}
+
+.lightBack
+{
+	background-color: rgba(160, 160, 160, 0.2);
+}
+
+.darkBack
+{
+	background-color: rgba(160, 160, 160, 0.3);
 }
 
 body{background-image: url(brushed.png);}

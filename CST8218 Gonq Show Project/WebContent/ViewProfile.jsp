@@ -9,26 +9,17 @@
 <head>
 <link rel=stylesheet href="Resource/style.css" type="text/css">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Edit Your Profile</title>
+<title>User's Profile</title>
 	<%
-	String driver = "com.mysql.jdbc.Driver";  
-    try {
-		Class.forName(driver).newInstance();
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
 		Connection connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/gonqshowdb", "gonqshow", "gonqshow");
 		
-		String seshEmail = request.getParameter("email");
+		String passEmail = request.getQueryString();
 		
-		if (seshEmail == null)
-		{
-			seshEmail = request.getSession().getAttribute("email").toString();
-		}
+		if ( passEmail.equals(request.getSession().getAttribute("emailLogin").toString()) )
+			response.sendRedirect("homepage.jsp");
 		
 		PreparedStatement statement = connect.prepareStatement("SELECT * FROM user WHERE email=?"); 
-        statement.setString(1, seshEmail); 
+        statement.setString(1, passEmail); 
 		
         ResultSet results = statement.executeQuery();
 		
@@ -53,21 +44,13 @@
 			
 			session.setAttribute("picture", results.getString(10));
 		}
-		
-		boolean visible = false;
 	%>
 </head>
 <%@include file="menu.jsp" %>
 
 <body id=wrap>
-<%-- Welcome message and link to user page --%>
-<b><label for="Welcome"><fmt:message key="home.title" /></label> <%=session.getAttribute("first") %></b>
-<br />
-<a href="users.jsp"><fmt:message key="home.userPageLink"/></a>
-<%-- Search Bar linking to users page which displays search results. --%>
 <hr>
 <div id="ProfileInfo">
-	<form action="EditProfileServlet" id="PictureForm" method="post"  enctype="multipart/form-data">
 	<table>
 		<tr>
 			<td>
@@ -76,12 +59,11 @@
 			<td><table>
 			<tr>
 				<td><b><label for="Name"><fmt:message key="home.nameLabel" /></label> </b></td>
-				<td><input name="fName" type="text" value="<%=session.getAttribute("first") %>" /></td>
-				<td><input name="lName" type="text" value="<%=session.getAttribute("last") %>" /></td>
+				<td><%=session.getAttribute("first") + " " + session.getAttribute("last") %></td>
 			</tr>
 			<tr>
 				<td><b><label for="Position"><fmt:message key="home.positionLabel" /></label></b></td>
-				<td><%=session.getAttribute("stud") %></td>
+				<td><%=session.getAttribute("stud") %>
 			</tr>
 			<tr>
 				<td><b><label for="Department"><fmt:message key="home.departmentLabel" /></label></b></td>
@@ -91,30 +73,68 @@
 				<td><b><label for="Program"><fmt:message key="home.programLabel" /></label></b></td>
 				<td><%=session.getAttribute("prog") %></td>
 			</tr>
+			<% if (session.getAttribute("about") != null && session.getAttribute("about") != "\0") { %>
 			<tr>
 				<td><b><label for="About"><fmt:message key="home.aboutLabel" /></label></b></td>		
-				<td colspan="3"><%if (session.getAttribute("about") != null ) { %><input name="about" type="text" value="<%=session.getAttribute("about") %>" size="100" /> <% } %>
-				<% if (session.getAttribute("about") == null ) { %><input name="about" type="text" size="100" /> <% } %></td>
-				<td></td>
+				<td><%=session.getAttribute("about") %></td>
 			</tr>
+			<% } %>
 		</table></td>
 	</tr>
-	<tr><td>
-		<input type="file" name="profilePicture" size="50" /><br />
-	</td></tr>
 	</table>
-	<br/>
-	<br/>
-	<table width="100%">
-		<tr>
-			<td align="center">
-				<input type="submit" value=<fmt:message key="home.uploadButton" /> />
-			</td>
-		</tr>
-	</table>
-	</form>
 </div>
 <hr>
+<div id="Content">
+	<table class=contentTable>
+		<%
+		//Connection connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/gonqshowdb", "root", "root");
+		
+		PreparedStatement testState = connect.prepareStatement("SELECT * FROM content WHERE user_email=(?) AND type<>(?) ORDER BY date_time DESC");
+		testState.setString(1, session.getAttribute("email").toString());
+		testState.setString(2, "comment");
+
+		results = testState.executeQuery();
+		
+		//TODO: Content will be fileName, navigate to Content/ userEmail / + fileName to open file/photo
+		while( results.next() )
+		{
+			%><tr><td><% if(results.getString(2).toLowerCase().matches("image") || results.getString(2).toLowerCase().matches("document") ) { %>
+			<a class=imgLink href="Content/<%=session.getAttribute("email").toString() + "/" + results.getString(4) %>"><img src="Resource/<%= results.getString(2).toLowerCase() %>Icon.png" /></a>
+			<%} %>
+			<% if(results.getString(2).toLowerCase().matches("post")){ %>
+			<%=results.getString(4)	//Content
+			%><% } %></td>
+			</tr>
+			<tr><td>
+			<%=results.getString(5)
+			%></td></tr>
+			<tr><td><a href="ViewPost.jsp?<%=results.getString(1)%>" class=imgLink><img src="Resource/commentIcon.png" /></a></td></tr>
+			<tr><td colspan="2"><hr class="commentDivide"></td></tr>
+			<% testState = connect.prepareStatement("SELECT * FROM content WHERE on_id = (?) ORDER BY date_time ASC");
+			testState.setString(1, results.getString(1));
+			
+			ResultSet commentResults = testState.executeQuery();
+			
+			while(commentResults.next())
+			{
+				%>
+				<tr>
+					<td class=darkBack colspan="2"><%=commentResults.getString(3) %></td>
+				</tr>
+				<tr>
+					<td class=lightBack colspan="2"><%=commentResults.getString(4) %></td>
+				</tr>
+				<tr>
+					<td class=darkBack colspan="2"><%=commentResults.getString(5) %></td>
+				</tr>
+				<%
+			}
+			%>
+			<tr><td colspan="2"><hr id=contentBreak></td></tr>
+			<%
+		}%>
+	</table>
+</div> 
 
 </body>
 </html>

@@ -6,31 +6,11 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-<style type="text/css" media="screen">
-	td {
-		padding-left: 40px;
-		padding-right: 40px;
-		padding-top: 10px;
-		padding-bottom: 10px;
-	}
-</style>
+<title>Users</title>
+<link rel=stylesheet href="Resource/style.css" type="text/css">
 </head>
+<%@include file="menu.jsp" %>
 <body>
-	<center>
-	<h1>List of Users</h1>
-	<table>
-		<tr>
-			<td><button type="button" id= >My Content</button></td>
-			<td><button type="button" id= >Profile</button></td>
-			<td><button type="button" id= >Logout</button></td>
-		</tr>
-	</table>
-	</center>
-	<br />
-	<br />
-	<br />
-		
 	<% 
 		/*if (session.getAttribute("firstName") == null || session.getAttribute("firstName") == "") {
 			response.sendRedirect("login.jsp");
@@ -38,32 +18,47 @@
 		
 		Class.forName("com.mysql.jdbc.Driver");
 		String connectionURL = "jdbc:mysql://localhost:3306/gonqshowdb";      
-		Connection connection = DriverManager.getConnection(connectionURL, "root", "root");	
-		Statement statement = connection.createStatement();
-		ResultSet resultset = statement.executeQuery("select first_name, last_name, program, about_me, email from user") ; 
+		Connection connect = DriverManager.getConnection(connectionURL, "gonqshow", "gonqshow");	
+		Statement statement = connect.createStatement();
+		ResultSet resultset = statement.executeQuery("select first_name, last_name, program, about_me, email, profilePic from user") ; 
 	%>
-	                           
-    <center>
+	<div id="wrap">                           
     <table>
 		<% while(resultset.next()){ %>
 		<tr>
-		  <td> 
-		  	<%= resultset.getString(1) + " " + resultset.getString(2) + " - " %> <i><%= resultset.getString(3) %></i>
-		  </td>
+			<td align="center">
+				<% if(resultset.getString(6) != null) { %>
+				<img class=profilePic src="Content/<%=resultset.getString(5) + "/" + resultset.getString(6)%>" />
+				<% } else { %>
+				<img src="Resource/profileDefault.jpg" alt="Profile Picture" style="width:175px;height:200px">
+				<% } %>
+			</td>
+			<td>
+			<table>
+				<tr>
+				  <td> 
+				  	<%= resultset.getString(1) + " " + resultset.getString(2) + " - " %> <i><%= resultset.getString(3) %></i>
+				  </td>
+				</tr>
+				
+				<% if (resultset.getString(4) != null) {%>
+				<tr>
+				  <td> 
+				  	<%= resultset.getString(4) %>
+				  </td>
+				</tr>
+				<% } %>
+				<tr>
+				  <td align="center"> 
+				  	<a href="ViewProfile.jsp?<%=resultset.getString(5)%>"><button>View Profile</button></a>
+				  </td>
+				</tr>	
+			</table>
+			</td>
 		</tr>
-		<tr>
-		  <td> 
-		  	<%= resultset.getString(4) %>
-		  </td>
-		</tr>
-		<tr>
-		  <td> 
-		  	<button type="button" id=<%= resultset.getString(4) %> >Follow</button>
-		  	<hr />
-		  </td>
-		</tr>
+		<tr><td colspan="2"><hr/></td></tr>
 		<% } %>
     </table>
-    </center>
+    </div>
 </body>
 </html>
