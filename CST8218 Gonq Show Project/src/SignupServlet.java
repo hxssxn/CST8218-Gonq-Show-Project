@@ -30,6 +30,9 @@ public class SignupServlet extends HttpServlet {
 	static String programDepartment;
 	static String program;
 	static String studentOrFaculty;
+	private static final String StudentEmailRegularExpression = "^[_A-Za-z0-9-]+(\\[0-9-]+)*@algonquinlive.com";
+
+	private static final String StaffEmailRegularExpression = "^[_A-Za-z0-9-]*@algonquincollege.com";
 	
 	private static final long serialVersionUID = 1L;
        
@@ -55,6 +58,7 @@ public class SignupServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
+		boolean validated = true;
 		
 		email = request.getParameter("email");
 		password1 = request.getParameter("password1");
@@ -65,27 +69,53 @@ public class SignupServlet extends HttpServlet {
 		programDepartment = request.getParameter("departmentDropDown");
 		program = request.getParameter("programDropDown");
 		studentOrFaculty = request.getParameter("sf");
+
+		 if (email.isEmpty() || password1.isEmpty() || password2.isEmpty() || firstName.isEmpty() || lastName.isEmpty() )
+		 {
+
+		 /* REDIRCT BACKT TO LOGIN WITH MISSING INFORMATION ERROR MESSAGE */
+
+		 out.print("<p style=\"color:red\">Required Field(s) Missing</p>");
+		 RequestDispatcher requestDispatcher=request.getRequestDispatcher("signup.jsp");    
+			requestDispatcher.include(request,response);
+			validated = false;
+		 }
+
+		 if (!email.matches(StudentEmailRegularExpression) && !email.matches(StaffEmailRegularExpression)) {
+
+		 /* REDIRCT BACKT TO LOGIN WITH WRONG EMAIL ERROR MESSAGE */
+
+		 out.print("<p style=\"color:red\">Valid Algonquin College Email Not Found</p>");
+		 RequestDispatcher requestDispatcher=request.getRequestDispatcher("signup.jsp");    
+			requestDispatcher.include(request,response);
+			validated = false;
+		 }
 		
-		if (password1.equals(password2)){
+		if ( !password1.equals(password2) || password1.isEmpty())
+		{
+			out.print("<p style=\"color:red\">Password do not match</p>");    
+			RequestDispatcher requestDispatcher=request.getRequestDispatcher("signup.jsp");    
+			requestDispatcher.include(request,response); 
+			validated = false;
+		}
+		 
+		if ( validated )
+		{
 			if (insertNewRecord()) {
 				HttpSession session = request.getSession();
 				session.setAttribute("firstName", firstName);
 				session.setAttribute("lastName", lastName);
 				session.setAttribute("email", email);
 				session.setMaxInactiveInterval(30*60);
-				RequestDispatcher requestDispatcher = request.getRequestDispatcher("homepage.jsp");
-				requestDispatcher.forward(request,response);
+				RequestDispatcher requestDispatcher = request.getRequestDispatcher("login.jsp");
+				requestDispatcher.include(request,response);
 			} else {
 				out.print("<p style=\"color:red\">Sorry sign up error</p>");    
 				RequestDispatcher requestDispatcher=request.getRequestDispatcher("signup.jsp");    
 				requestDispatcher.include(request,response); 
 			}
 		}
-		else {
-			out.print("<p style=\"color:red\">Password do not match</p>");    
-			RequestDispatcher requestDispatcher=request.getRequestDispatcher("signup.jsp");    
-			requestDispatcher.include(request,response); 
-		}
+		
 		out.close();	
 	}
 	
@@ -113,9 +143,9 @@ public class SignupServlet extends HttpServlet {
             preparedStatement.setString(4, lastName);
             preparedStatement.setString(5, programDepartment);
             preparedStatement.setString(6, program);
-            if (studentOrFaculty == "student") {
+            if (studentOrFaculty.equals("student") ) {
             	preparedStatement.setInt(7, 0);
-            } else if (studentOrFaculty == "faculty") {
+            } else if (studentOrFaculty.equals("faculty") ){
             	preparedStatement.setInt(7, 1);
             } else {
             	preparedStatement.setInt(7, 0);

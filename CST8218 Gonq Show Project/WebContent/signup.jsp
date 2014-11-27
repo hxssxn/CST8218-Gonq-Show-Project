@@ -22,6 +22,13 @@
 				</tr>
 			</thead>
 	        <tbody>
+	        	<%if (request.getSession().getAttribute("signUpError") != null ) { %>
+	        	<tr>
+	        		<td colspan="2" class="redText">
+	        			<%=request.getSession().getAttribute("signUpError").toString() %>
+	        		</td>
+	        	</tr>
+	        	<% } %>
 	        	<tr>
 	                <td colspan="2"><label for="Signup"><fmt:message key="reg.loginLabel" /> </label><a href="<c:url value='login.jsp?language=${language}' />"> <fmt:message key="reg.loginLink"/></a></td>
 	            </tr>
@@ -48,7 +55,7 @@
 	            	<td><label for="department"><fmt:message key="reg.departmentLabel" /></label></td>
 	            	<td>
 		            	<select name="departmentDropDown">
-						<option value="schoolOfAdvancedTechnology"><fmt:message key="reg.departmentOp1" /></option>
+						<option value="School Of Advanced Technology"><fmt:message key="reg.departmentOp1" /></option>
 						</select>
 					</td>
 	            </tr>
@@ -56,9 +63,9 @@
 	            	<td><label for="program"><fmt:message key="reg.programLabel" /></label></td>
 	            	<td>
 		            	<select name="programDropDown" >
-						<option value="computerEngineeringTechnology"><fmt:message key="reg.programOp1" /></option>
-						<option value="computerProgramming"><fmt:message key="reg.programOp2" /></option>
-						<option value="computerSystemsTechnician"><fmt:message key="reg.programOp3" /></option>
+						<option value="Computer Engineering Technology"><fmt:message key="reg.programOp1" /></option>
+						<option value="Computer Programming"><fmt:message key="reg.programOp2" /></option>
+						<option value="Computer Systems Technician"><fmt:message key="reg.programOp3" /></option>
 						</select>
 					</td>
 	            </tr>

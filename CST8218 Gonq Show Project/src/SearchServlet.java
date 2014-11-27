@@ -30,8 +30,8 @@ public class SearchServlet extends HttpServlet
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	{
 	}
 
 	/**
@@ -44,7 +44,7 @@ public class SearchServlet extends HttpServlet
 		Query = request.getParameter("Query");
 		
 		Connection connection = null;  
-        PreparedStatement preparedStatement = null;  
+        PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;  
 
         String url = "jdbc:mysql://localhost:3306/";  
@@ -53,27 +53,110 @@ public class SearchServlet extends HttpServlet
         String dbUsername = "gonqshow";  
         String dbPassword = "gonqshow";  
         
+        //if referer is not searchserlvet store as last referer
+        
         try 
         {  
             Class.forName(driver).newInstance();  
             connection = DriverManager.getConnection(url + databaseName, dbUsername, dbPassword);  
+            
+            // First Query
             preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE first_name = '" + Query + "'");
             resultSet = preparedStatement.executeQuery();
-
-            if(resultSet.isBeforeFirst())
+            
+            if(resultSet.first())
             {
-            	resultSet.next();
 	            request.setAttribute("FullName", resultSet.getString(4) + " " + resultSet.getString(5));
-	            request.setAttribute("About", resultSet.getString(6));
-	            request.setAttribute("Department", resultSet.getString(7));
-	            request.setAttribute("Program", resultSet.getString(8));
+	            RequestDispatcher rd = getServletContext().getRequestDispatcher("/ViewProfile.jsp?" + resultSet.getString(2));
+	            rd.forward(request, response);
             }
             else
             {
-            	request.setAttribute("SearchResults", false);
-            }
-            RequestDispatcher rd = getServletContext().getRequestDispatcher("/users.jsp");
-            rd.forward(request, response);
+            	preparedStatement.close();
+            	resultSet.close();
+            	try
+            	{
+                    preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE last_name = '" + Query + "'");
+                    resultSet = preparedStatement.executeQuery();
+                    
+                    if(resultSet.first())
+                    {
+        	            request.setAttribute("FullName", resultSet.getString(4) + " " + resultSet.getString(5));
+        	            RequestDispatcher rd = getServletContext().getRequestDispatcher("/ViewProfile.jsp?" + resultSet.getString(2));
+        	            rd.forward(request, response);
+                    }
+                    else
+                    {
+                    	preparedStatement.close();
+                    	resultSet.close();
+                    	try
+                    	{
+                            preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE email = '" + Query + "'");
+                            resultSet = preparedStatement.executeQuery();
+                    		
+                            if(resultSet.first())
+                            {
+                	            request.setAttribute("FullName", resultSet.getString(4) + " " + resultSet.getString(5));
+                	            RequestDispatcher rd = getServletContext().getRequestDispatcher("/ViewProfile.jsp?" + resultSet.getString(2));
+                	            rd.forward(request, response);
+                            }
+                            else
+                            {
+                            //	RequestDispatcher rd = getServletContext().getRequestDispatcher(referer);
+                            	request.setAttribute("searchError", "No Results Found");
+                            //	rd.forward(request, response);
+                            	response.sendRedirect("/gonqshow/homepage.jsp");
+                            }
+                    	}
+                    	catch(Exception e)
+                    	{
+                    		e.printStackTrace();
+                    	}
+                    	finally 
+                        {
+                        	// Close the connection to the database
+                        	if(connection != null)
+                        	{
+                        		try
+                        		{
+                        			connection.close();
+                        		}
+                        		catch (SQLException e)
+                        		{
+                        			e.printStackTrace();
+                        		}
+                        	}
+                        	// Close the prepared statement, releasing resources
+                        	if (preparedStatement != null) 
+                        	{  
+                                try
+                                {  
+                                    preparedStatement.close();  
+                                } catch (SQLException e)
+                                {  
+                                    e.printStackTrace();  
+                                }  
+                            }
+                            // Close ResultSet, releasing resources
+                            if (resultSet != null) 
+                            {  
+                                try 
+                                {  
+                                    resultSet.close(); 
+                                } 
+                                catch (SQLException e)
+                                {  
+                                    e.printStackTrace();  
+                                }  
+                            }
+                        }
+                    }
+            	}
+            	catch(Exception e)
+            	{
+            		e.printStackTrace();
+            	}
+            }   
         }
         catch(Exception e)
         {
@@ -109,7 +192,7 @@ public class SearchServlet extends HttpServlet
             {  
                 try 
                 {  
-                    resultSet.close();  
+                    resultSet.close(); 
                 } 
                 catch (SQLException e)
                 {  

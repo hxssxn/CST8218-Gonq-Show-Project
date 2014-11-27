@@ -10,14 +10,38 @@
 <title></title>
 		<%Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/gonqshowdb", "gonqshow", "gonqshow");
 		
-		PreparedStatement userState = connection.prepareStatement("SELECT * FROM user"); 
+		PreparedStatement userState = connection.prepareStatement("SELECT * FROM user ORDER BY first_name"); 
         ResultSet userResults = userState.executeQuery();
+
+        final String refer = request.getRequestURL().toString().replaceAll("^(.*?)gonqshow", "");
+        HttpSession s = request.getSession();
+        
+        s.setAttribute("refer", refer);
+        
+        if(request.getAttribute("searchError") == null)
+        	request.setAttribute("searchError", "");
 		%>
 </head>
 <body>
 	<div id="main_menu">
-		<a id="logout_button" href="LogoutServlet"><fmt:message key="home.logoutButton" /></a>
-		<a href="users.jsp"><fmt:message key="home.userPageLink"/></a>
+		<div id="dropDownMenu">
+			<table width="100%">
+				<tr>
+					<td>
+						<img class="miniProfilePic" src="Resource/logo.png">
+					</td>
+					<td>
+						<a class="imgLink" href="homepage.jsp"><img class="miniProfilePic" src="Resource/homeIcon.png"></a>
+					</td>
+					<td>
+						<a class="imgLink" href="users.jsp"><img class="miniProfilePic" src="Resource/userIcon.png"></a>
+					</td>
+					<td>
+						<a class="imgLink" href="LogoutServlet"><img class="miniProfilePic" src="Resource/logoutIcon.png"></a>
+					</td>
+				</tr>
+			</table>
+		</div>
 		<div id="MenuUsers">
 			<table>
 			<% while( userResults.next() ) { %>

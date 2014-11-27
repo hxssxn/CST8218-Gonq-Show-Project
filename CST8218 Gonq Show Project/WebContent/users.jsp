@@ -20,7 +20,8 @@
 		String connectionURL = "jdbc:mysql://localhost:3306/gonqshowdb";      
 		Connection connect = DriverManager.getConnection(connectionURL, "gonqshow", "gonqshow");	
 		Statement statement = connect.createStatement();
-		ResultSet resultset = statement.executeQuery("select first_name, last_name, program, about_me, email, profilePic from user") ; 
+		ResultSet resultset = statement.executeQuery("select first_name, last_name, program, about_me, email, profilePic from user order by first_name") ; 
+		String email = request.getSession().getAttribute("emailLogin").toString();
 	%>
 	<div id="wrap">                           
     <table>
