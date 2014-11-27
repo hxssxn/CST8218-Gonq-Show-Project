@@ -135,8 +135,8 @@ public class SignupServlet extends HttpServlet {
             connection = DriverManager.getConnection(url + databaseName, dbUsername, dbPassword);  
   
             preparedStatement = connection.prepareStatement("INSERT INTO user "
-            		+ "(email, password, first_name, last_name, program_department, program, student_faculty)"
-            		+ "VALUES (?, PASSWORD(?), ?, ?, ?, ?, ?)"); 
+            		+ "(email, password, first_name, last_name, program_department, program, student_faculty, about_me)"
+            		+ "VALUES (?, PASSWORD(?), ?, ?, ?, ?, ?, ?)"); 
             preparedStatement.setString(1, email);  
             preparedStatement.setString(2, password1); 
             preparedStatement.setString(3, firstName);
@@ -150,6 +150,7 @@ public class SignupServlet extends HttpServlet {
             } else {
             	preparedStatement.setInt(7, 0);
             }
+            preparedStatement.setString(8, aboutMe);
   
             int updateStatus = preparedStatement.executeUpdate();
             // Method will return false when the entire table is traversed
